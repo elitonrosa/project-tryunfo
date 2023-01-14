@@ -90,8 +90,9 @@ export default class Form extends Component {
             data-testid="trunfo-input"
             checked={ cardTrunfo }
             onChange={ onInputChange }
+            value="Super Trybe Trunfo"
           />
-          Super Trybe Trunfo
+          <span>Super Trybe Trunfo</span>
         </label>
         <button
           type="button"
