@@ -13,6 +13,7 @@ class App extends React.Component {
     cardRare: '',
     cardTrunfo: false,
     isSaveButtonDisabled: true,
+    hasTrunfo: false,
     cards: [],
   };
 
@@ -85,9 +86,25 @@ class App extends React.Component {
       });
     }
     delete card.isSaveButtonDisabled;
+    delete card.cards;
     this.setState((prevState) => ({
       cards: [...prevState.cards, card],
     }), () => this.resetInputs());
+  };
+
+  removeCard = (name) => {
+    const { cards } = this.state;
+    const newCards = cards.filter((card) => card.cardName !== name);
+    if (newCards.some((card) => card.cardTrunfo)) {
+      this.setState({
+        cards: newCards,
+      });
+    } else {
+      this.setState({
+        cards: newCards,
+        hasTrunfo: false,
+      });
+    }
   };
 
   render() {
@@ -102,7 +119,12 @@ class App extends React.Component {
         />
         <Card { ...this.state } />
         <div>
-          {cards.map((card, index) => <Card key={ index } { ...card } />)}
+          {cards.map((card, index) => (<Card
+            key={ index }
+            { ...card }
+            hasBtn
+            removeCard={ this.removeCard }
+          />))}
         </div>
       </div>
     );
