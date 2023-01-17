@@ -79,6 +79,12 @@ class App extends React.Component {
 
   onSaveButtonClick = () => {
     const card = { ...this.state };
+    console.log(card.cardTrunfo);
+    if (card.cardTrunfo === true) {
+      this.setState({
+        hasTrunfo: true,
+      });
+    }
     delete card.isSaveButtonDisabled;
     this.setState((prevState) => ({
       cards: [...prevState.cards, card],
