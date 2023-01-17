@@ -78,7 +78,12 @@ export default class Form extends Component {
             onChange={ onInputChange }
           />
         </label>
-        <select data-testid="rare-input" value={ cardRare } onChange={ onInputChange }>
+        <select
+          name="cardRare"
+          data-testid="rare-input"
+          value={ cardRare }
+          onChange={ onInputChange }
+        >
           <option value="normal">Normal</option>
           <option value="raro">Raro</option>
           <option value="muito raro">Muito Raro</option>
