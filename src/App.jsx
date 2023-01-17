@@ -79,7 +79,6 @@ class App extends React.Component {
 
   onSaveButtonClick = () => {
     const card = { ...this.state };
-    console.log(card.cardTrunfo);
     if (card.cardTrunfo === true) {
       this.setState({
         hasTrunfo: true,
@@ -92,6 +91,7 @@ class App extends React.Component {
   };
 
   render() {
+    const { cards } = this.state;
     return (
       <div>
         <h1>Tryunfo</h1>
@@ -101,6 +101,9 @@ class App extends React.Component {
           onSaveButtonClick={ this.onSaveButtonClick }
         />
         <Card { ...this.state } />
+        <div>
+          {cards.map((card, index) => <Card key={ index } { ...card } />)}
+        </div>
       </div>
     );
   }
