@@ -13,6 +13,7 @@ class App extends React.Component {
     cardRare: '',
     cardTrunfo: false,
     isSaveButtonDisabled: true,
+    cards: [],
   };
 
   onInputChange = ({ target }) => {
@@ -62,12 +63,26 @@ class App extends React.Component {
     }
   };
 
+  resetInputs = () => {
+    this.setState({
+      cardName: '',
+      cardDescription: '',
+      cardAttr1: '0',
+      cardAttr2: '0',
+      cardAttr3: '0',
+      cardImage: '',
+      cardRare: '',
+      cardTrunfo: false,
+      isSaveButtonDisabled: true,
+    });
+  };
+
   onSaveButtonClick = () => {
-    if (cardName && cardDescription && cardImage && cardRare) {
-      this.setState({
-        isSaveButtonDisabled: false,
-      });
-    }
+    const card = { ...this.state };
+    delete card.isSaveButtonDisabled;
+    this.setState((prevState) => ({
+      cards: [...prevState.cards, card],
+    }), () => this.resetInputs());
   };
 
   render() {
