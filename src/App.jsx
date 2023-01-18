@@ -15,6 +15,7 @@ class App extends React.Component {
     isSaveButtonDisabled: true,
     hasTrunfo: false,
     cards: [],
+    cardFilter: 'todas',
   };
 
   onInputChange = ({ target }) => {
@@ -108,7 +109,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { cards } = this.state;
+    const { cards, cardFilter } = this.state;
     return (
       <div>
         <h1>Tryunfo</h1>
@@ -117,14 +118,33 @@ class App extends React.Component {
           onInputChange={ this.onInputChange }
           onSaveButtonClick={ this.onSaveButtonClick }
         />
-        <Card { ...this.state } />
+        <Card { ...this.state } hasBtn={ false } removeCard={ this.removeCard } />
         <div>
-          {cards.map((card, index) => (<Card
-            key={ index }
-            { ...card }
-            hasBtn
-            removeCard={ this.removeCard }
-          />))}
+          <select
+            name="cardFilter"
+            data-testid="rare-filter"
+            value={ cardFilter }
+            onChange={ this.onInputChange }
+          >
+            <option value="todas">Todas</option>
+            <option value="normal">Normal</option>
+            <option value="raro">Raro</option>
+            <option value="muito raro">Muito Raro</option>
+          </select>
+          {cards
+            .filter((card) => {
+              if (cardFilter === 'todas') {
+                return card;
+              }
+              return card.cardRare === cardFilter;
+            })
+            .map((card, index) => (
+              <Card
+                key={ index }
+                { ...card }
+                hasBtn
+                removeCard={ this.removeCard }
+              />))}
         </div>
       </div>
     );
