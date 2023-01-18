@@ -17,6 +17,8 @@ class App extends React.Component {
     cards: [],
     cardFilter: 'todas',
     nameFilter: '',
+    disableFilters: false,
+    superTrunfoFilter: false,
   };
 
   onInputChange = ({ target }) => {
@@ -25,7 +27,12 @@ class App extends React.Component {
 
     this.setState({
       [name]: value,
-    }, () => this.validaForm());
+    }, () => {
+      this.validaForm();
+      if ([name][0] === 'superTrunfoFilter') {
+        this.trunfoFilter();
+      }
+    });
   };
 
   validaForm = () => {
@@ -109,8 +116,28 @@ class App extends React.Component {
     }
   };
 
+  trunfoFilter = () => {
+    const { superTrunfoFilter } = this.state;
+    if (superTrunfoFilter) {
+      this.setState({
+        disableFilters: true,
+      });
+    } else {
+      this.setState({
+        disableFilters: false,
+      });
+    }
+  };
+
   render() {
-    const { cards, cardFilter, nameFilter } = this.state;
+    const {
+      cards,
+      cardFilter,
+      nameFilter,
+      disableFilters,
+      superTrunfoFilter,
+    } = this.state;
+
     return (
       <div>
         <h1>Tryunfo</h1>
@@ -128,34 +155,59 @@ class App extends React.Component {
               data-testid="name-filter"
               value={ nameFilter }
               onChange={ this.onInputChange }
+              disabled={ disableFilters }
             />
             <select
               name="cardFilter"
               data-testid="rare-filter"
               value={ cardFilter }
               onChange={ this.onInputChange }
+              disabled={ disableFilters }
             >
               <option value="todas">Todas</option>
               <option value="normal">Normal</option>
               <option value="raro">Raro</option>
               <option value="muito raro">Muito Raro</option>
             </select>
+            <label htmlFor="superTrunfoFilter">
+              <input
+                type="checkbox"
+                name="superTrunfoFilter"
+                data-testid="trunfo-filter"
+                checked={ superTrunfoFilter }
+                onChange={ this.onInputChange }
+              />
+              <span>Super Trunfo</span>
+            </label>
           </div>
-          {cards
-            .filter((card) => {
-              if (cardFilter === 'todas') {
-                return card;
-              }
-              return card.cardRare === cardFilter;
-            })
-            .filter((card) => card.cardName.includes(nameFilter))
-            .map((card, index) => (
-              <Card
-                key={ index }
-                { ...card }
-                hasBtn
-                removeCard={ this.removeCard }
-              />))}
+          {
+            superTrunfoFilter ? (
+              cards
+                .filter((card) => card.cardTrunfo)
+                .map((cardTrunfo, index) => (<Card
+                  key={ index }
+                  { ...cardTrunfo }
+                  hasBtn
+                  removeCard={ this.removeCard }
+                />))
+            ) : (
+              cards
+                .filter((card) => {
+                  if (cardFilter === 'todas') {
+                    return card;
+                  }
+                  return card.cardRare === cardFilter;
+                })
+                .filter((card) => card.cardName.includes(nameFilter))
+                .map((card, index) => (
+                  <Card
+                    key={ index }
+                    { ...card }
+                    hasBtn
+                    removeCard={ this.removeCard }
+                  />))
+            )
+          }
         </div>
       </div>
     );
