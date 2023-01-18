@@ -16,6 +16,7 @@ class App extends React.Component {
     hasTrunfo: false,
     cards: [],
     cardFilter: 'todas',
+    nameFilter: '',
   };
 
   onInputChange = ({ target }) => {
@@ -109,7 +110,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { cards, cardFilter } = this.state;
+    const { cards, cardFilter, nameFilter } = this.state;
     return (
       <div>
         <h1>Tryunfo</h1>
@@ -120,17 +121,26 @@ class App extends React.Component {
         />
         <Card { ...this.state } hasBtn={ false } removeCard={ this.removeCard } />
         <div>
-          <select
-            name="cardFilter"
-            data-testid="rare-filter"
-            value={ cardFilter }
-            onChange={ this.onInputChange }
-          >
-            <option value="todas">Todas</option>
-            <option value="normal">Normal</option>
-            <option value="raro">Raro</option>
-            <option value="muito raro">Muito Raro</option>
-          </select>
+          <div>
+            <input
+              type="text"
+              name="nameFilter"
+              data-testid="name-filter"
+              value={ nameFilter }
+              onChange={ this.onInputChange }
+            />
+            <select
+              name="cardFilter"
+              data-testid="rare-filter"
+              value={ cardFilter }
+              onChange={ this.onInputChange }
+            >
+              <option value="todas">Todas</option>
+              <option value="normal">Normal</option>
+              <option value="raro">Raro</option>
+              <option value="muito raro">Muito Raro</option>
+            </select>
+          </div>
           {cards
             .filter((card) => {
               if (cardFilter === 'todas') {
@@ -138,6 +148,7 @@ class App extends React.Component {
               }
               return card.cardRare === cardFilter;
             })
+            .filter((card) => card.cardName.includes(nameFilter))
             .map((card, index) => (
               <Card
                 key={ index }
